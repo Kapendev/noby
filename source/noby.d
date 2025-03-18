@@ -1,14 +1,13 @@
+#!/bin/env -S dmd -run
+
 module noby;
 
 // [Noby Script]
 
 void main() {
     log(Level.info, "Hello noby!");
-    version (Windows) {
-        cmd("cmd.exe", "/c", "dir");
-    } else {
-        cmd("ls");
-    }
+    version (Windows) cmd("cmd.exe", "/c", "dir");
+    else cmd("ls");
 }
 
 // [Noby Library]
@@ -28,7 +27,6 @@ enum Level : ubyte {
 
 void log(Level level, IStr text) {
     import std.stdio;
-
     if (level < minLogLevel) return;
     with (Level) final switch (level) {
         case none:    break;
@@ -40,14 +38,61 @@ void log(Level level, IStr text) {
 
 void logf(A...)(Level level, IStr text, A args) {
     import std.format;
-
     log(level, text.format(args));
 }
 
-bool cmd(IStr[] args...) {
+int cmd(IStr[] args...) {
     import std.stdio;
     import std.process;
-
     writeln("[CMD] ", args);
-    return spawnProcess(args).wait() != 0;
+    return spawnProcess(args).wait();
+}
+
+void touch(IStr path) {
+    import std.file;
+    write(path, "");
+}
+
+void paste(IStr path, IStr content) {
+    import std.file;
+    write(path, content);
+}
+
+void cp(IStr source, IStr target) {
+    import std.file;
+    copy(source, target);
+}
+
+void rm(IStr path) {
+    import std.file;
+    remove(path);
+}
+
+void mkdir(IStr path) {
+    import std.file;
+    mkdirRecurse(path);
+}
+
+void rmdir(IStr path) {
+    import std.file;
+    rmdirRecurse(path);
+}
+
+IStr[] ls(IStr path = ".", bool isRecursive = false) {
+    import std.file;
+    IStr[] result;
+    foreach (dir; dirEntries(cast(string) path, isRecursive ? SpanMode.breadth : SpanMode.shallow)) {
+        result ~= dir.name;
+    }
+    return result;
+}
+
+IStr basename(IStr path) {
+    import std.path;
+    return baseName(path);
+}
+
+IStr realpath(IStr path) {
+    import std.path;
+    return absolutePath(cast(string) path);
 }
