@@ -103,6 +103,11 @@ IStr read() {
     return readln().strip();
 }
 
+IStr join(IStr[] args...) {
+    import std.path;
+    return buildPath(args);
+}
+
 bool isYes(IStr arg) {
     return (arg.length == 1 && (arg[0] == 'Y' || arg[0] == 'y'));
 }
