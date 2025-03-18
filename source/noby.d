@@ -61,7 +61,7 @@ void mkdir(IStr path, bool isRecursive = false) {
     import std.file;
     if (!path.isX) {
         if (isRecursive) mkdirRecurse(path);
-        else mkdir(path);
+        else std.file.mkdir(path);
     }
 }
 
@@ -69,7 +69,7 @@ void rmdir(IStr path, bool isRecursive = false) {
     import std.file;
     if (!path.isX) {
         if (isRecursive) rmdirRecurse(path);
-        else rmdir(path);
+        else std.file.rmdir(path);
     }
 }
 
