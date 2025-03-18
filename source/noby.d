@@ -3,7 +3,12 @@ module noby;
 // [Noby Script]
 
 void main() {
-	logf(Level.info, "Hello noby!");
+    log(Level.info, "Hello noby!");
+    version (Windows) {
+        cmd("cmd.exe", "/c", "dir");
+    } else {
+        cmd("ls");
+    }
 }
 
 // [Noby Library]
@@ -37,4 +42,12 @@ void logf(A...)(Level level, IStr text, A args) {
     import std.format;
 
     log(level, text.format(args));
+}
+
+bool cmd(IStr[] args...) {
+    import std.stdio;
+    import std.process;
+
+    writeln("[CMD] ", args);
+    return spawnProcess(args).wait() != 0;
 }
