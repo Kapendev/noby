@@ -12,7 +12,7 @@ void main() {
 
 // [Noby Library]
 
-enum cloneExt = "._cl_";
+enum cloneExt = "._cl";
 
 Level minLogLevel = Level.info;
 
