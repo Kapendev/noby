@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Alex"
+	],
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "init",
+	"targetType": "executable",
+	"stringImportPaths": [
+		"../source"
+	]
+}

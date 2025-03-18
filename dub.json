@@ -1,0 +1,16 @@
+{
+	"authors": [
+		"Alex"
+	],
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "noby",
+	"targetType": "executable",
+	"mainSourceFile": "source/noby.d",
+	"stringImportPaths": [
+		"source"
+	],
+	"subPackages" : [
+		"init"
+	]
+}
