@@ -1,7 +1,5 @@
 #!/bin/env -S dmd -run
 
-module noby;
-
 // [Noby Script]
 
 void main() {
