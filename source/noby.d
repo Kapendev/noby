@@ -47,6 +47,11 @@ void echo(A...)(A args) {
     writeln(args);
 }
 
+void echon(A...)(A args) {
+    import std.stdio;
+    write(args);
+}
+
 void cp(IStr source, IStr target) {
     import std.file;
     copy(source, target);
@@ -80,7 +85,7 @@ IStr cat(IStr path) {
 
 IStr[] ls(IStr path = ".", bool isRecursive = false) {
     import std.file;
-    IStr[] result;
+    IStr[] result = [];
     foreach (dir; dirEntries(cast(string) path, isRecursive ? SpanMode.breadth : SpanMode.shallow)) {
         result ~= dir.name;
     }
@@ -102,6 +107,18 @@ IStr read() {
     import std.string;
     return readln().strip();
 }
+
+IStr readYesNo(IStr text, IStr firstValue = "?") {
+    auto result = firstValue;
+    while (true) {
+        if (result.length == 0) result = "Y";
+        if (result.isYesOrNo) break;
+        echon(text, " [Y/n] ");
+        result = read();
+    }
+    return result;
+}
+
 
 IStr join(IStr[] args...) {
     import std.path;
@@ -130,23 +147,34 @@ bool endsWith(IStr str, IStr end) {
     return str[$ - end.length .. $] == end;
 }
 
-void paste(IStr path, IStr content) {
-    import std.file;
-    write(path, content);
+int findStart(IStr str, IStr item) {
+    import std.string;
+    return cast(int) str.indexOf(item);
 }
 
-void pasteIfNew(IStr path, IStr content) {
-    if (!path.isX) paste(path, content);
+void clear(IStr path = ".", IStr ext = "") {
+    foreach (file; ls(path)) {
+        if (file.endsWith(ext)) rm(file);
+    }
+}
+
+void paste(IStr path, IStr content, bool isOnlyMaking = false) {
+    import std.file;
+    if (isOnlyMaking) {
+        if (!path.isX) write(path, content);
+    } else {
+        write(path, content);
+    }
 }
 
 void clone(IStr path) {
     if (path.isX) paste(path ~ cloneExt, cat(path));
 }
 
-void restore(IStr path) {
+void restore(IStr path, bool isOnlyRemoving = false) {
     auto clonePath = path ~ cloneExt;
     if (clonePath.isX) {
-        paste(path, cat(clonePath));
+        if (!isOnlyRemoving) paste(path, cat(clonePath));
         rm(clonePath);
     }
 }
