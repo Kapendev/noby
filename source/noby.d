@@ -10,9 +10,10 @@ void main() {
 
 // [Noby Library]
 
-enum cloneExt = "._cl";
-
 Level minLogLevel = Level.info;
+bool isCmdLineHidden = false;
+
+enum cloneExt = "._cl";
 
 alias Sz      = size_t;         /// The result of sizeof, ...
 alias Str     = char[];         /// A string slice of chars.
@@ -102,8 +103,7 @@ IStr realpath(IStr path) {
 
 IStr read() {
     import std.stdio;
-    import std.string;
-    return readln().strip();
+    return readln().trim();
 }
 
 IStr readYesNo(IStr text, IStr firstValue = "?") {
@@ -146,8 +146,44 @@ bool endsWith(IStr str, IStr end) {
 }
 
 int findStart(IStr str, IStr item) {
-    import std.string;
-    return cast(int) str.indexOf(item);
+    if (str.length < item.length || item.length == 0) return -1;
+    foreach (i; 0 .. str.length - item.length + 1) {
+        if (str[i .. i + item.length] == item) return cast(int) i;
+    }
+    return -1;
+}
+
+int findEnd(IStr str, IStr item) {
+    if (str.length < item.length || item.length == 0) return -1;
+    foreach_reverse (i; 0 .. str.length - item.length + 1) {
+        if (str[i .. i + item.length] == item) return cast(int) i;
+    }
+    return -1;
+}
+
+
+IStr trimStart(IStr str) {
+    IStr result = str;
+    while (result.length > 0) {
+        auto isSpace = (result[0] >= '\t' && result[0] <= '\r') || (result[0] == ' ');
+        if (isSpace) result = result[1 .. $];
+        else break;
+    }
+    return result;
+}
+
+IStr trimEnd(IStr str) {
+    IStr result = str;
+    while (result.length > 0) {
+        auto isSpace = (result[$ - 1] >= '\t' && result[$ - 1] <= '\r') || (result[$ - 1] == ' ');
+        if (isSpace) result = result[0 .. $ - 1];
+        else break;
+    }
+    return result;
+}
+
+IStr trim(IStr str) {
+    return str.trimStart().trimEnd();
 }
 
 void clear(IStr path = ".", IStr ext = "") {
@@ -166,7 +202,7 @@ void paste(IStr path, IStr content, bool isOnlyMaking = false) {
 }
 
 void clone(IStr path) {
-    if (path.isX) paste(path ~ cloneExt, cat(path));
+    if (path.isX) cp(path, path ~ cloneExt);
 }
 
 void restore(IStr path, bool isOnlyRemoving = false) {
@@ -187,6 +223,18 @@ void log(Level level, IStr text) {
     }
 }
 
+void logi(IStr text) {
+    log(Level.info, text);
+}
+
+void logw(IStr text) {
+    log(Level.warning, text);
+}
+
+void loge(IStr text) {
+    log(Level.error, text);
+}
+
 void logf(A...)(Level level, IStr text, A args) {
     import std.format;
     log(level, text.format(args));
@@ -195,7 +243,7 @@ void logf(A...)(Level level, IStr text, A args) {
 int cmd(IStr[] args...) {
     import std.stdio;
     import std.process;
-    writeln("[CMD] ", args);
+    if (!isCmdLineHidden) writeln("[CMD] ", args);
     try {
         return spawnProcess(args).wait();
     } catch (Exception e) {
