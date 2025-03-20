@@ -1,9 +1,10 @@
 {
 	"authors": [
-		"Alex"
+		"Alexandros F. G. Kapretsos"
 	],
-	"description": "A minimal D application.",
-	"license": "proprietary",
+	"copyright": "Copyright © 2024, Alexandros F. G. Kapretsos",
+	"description": "A script that creates a noby.d file in the current folder.",
+	"license": "MIT",
 	"name": "init",
 	"targetType": "executable",
 	"stringImportPaths": [

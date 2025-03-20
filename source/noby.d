@@ -78,6 +78,11 @@ void rmdir(IStr path, bool isRecursive = false) {
     }
 }
 
+IStr pwd() {
+    import std.file;
+    return getcwd();
+}
+
 IStr cat(IStr path) {
     import std.file;
     return path.isX ? readText(path) : "";
