@@ -2,10 +2,11 @@
 
 // [Noby Script]
 
-void main() {
+int main(string[] args) {
     log(Level.info, "Hello noby!");
     version (Windows) cmd("cmd.exe", "/c", "dir");
     else cmd("ls");
+    return 0;
 }
 
 // [Noby Library]
