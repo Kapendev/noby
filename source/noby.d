@@ -34,12 +34,12 @@ bool isX(IStr path) {
 
 bool isF(IStr path) {
     import std.file;
-    return path.exists;
+    return path.isX && path.isFile;
 }
 
 bool isD(IStr path) {
     import std.file;
-    return path.isDir;
+    return path.isX && path.isDir;
 }
 
 void echo(A...)(A args) {
@@ -50,6 +50,16 @@ void echo(A...)(A args) {
 void echon(A...)(A args) {
     import std.stdio;
     write(args);
+}
+
+void echof(A...)(IStr text, A args) {
+    import std.stdio;
+    writefln(text, args);
+}
+
+void echofn(A...)(IStr text, A args) {
+    import std.stdio;
+    writef(text, args);
 }
 
 void cp(IStr source, IStr target) {
@@ -72,7 +82,7 @@ void mkdir(IStr path, bool isRecursive = false) {
 
 void rmdir(IStr path, bool isRecursive = false) {
     import std.file;
-    if (!path.isX) {
+    if (path.isX) {
         if (isRecursive) rmdirRecurse(path);
         else std.file.rmdir(path);
     }
@@ -123,6 +133,10 @@ IStr readYesNo(IStr text, IStr firstValue = "?") {
     return result;
 }
 
+IStr fmt(A...)(IStr text, A args...) {
+    import std.format;
+    return format(text, args);
+}
 
 IStr join(IStr[] args...) {
     import std.path;
@@ -166,7 +180,6 @@ int findEnd(IStr str, IStr item) {
     }
     return -1;
 }
-
 
 IStr trimStart(IStr str) {
     IStr result = str;
@@ -242,14 +255,12 @@ void loge(IStr text) {
 }
 
 void logf(A...)(Level level, IStr text, A args) {
-    import std.format;
-    log(level, text.format(args));
+    log(level, text.fmt(args));
 }
 
 int cmd(IStr[] args...) {
-    import std.stdio;
     import std.process;
-    if (!isCmdLineHidden) writeln("[CMD] ", args);
+    if (!isCmdLineHidden) echo("[CMD] ", args);
     try {
         return spawnProcess(args).wait();
     } catch (Exception e) {
