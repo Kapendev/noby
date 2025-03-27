@@ -13,19 +13,11 @@ So with the D compiler you bootstrap your build system and then you use the buil
 1. Copy the [noby.d](source/noby.d) file into your project.
 2. Replace the content of the main function with your own code.
 
-Then, run the script with the appropriate command:
+Then, run the script with:
 
-* Windows:
-
-    ```cmd
-    dmd -run noby.d
-    ```
-
-* Linux:
-
-    ```cmd
-    ./noby.d
-    ```
+```cmd
+dmd -run noby.d
+```
 
 ## Using Noby With Dub
 
