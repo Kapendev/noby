@@ -139,6 +139,12 @@ IStr basename(IStr path) {
     else return path[end + 1 .. $];
 }
 
+IStr dirname(IStr path) {
+    auto end = findEnd(path, pathSepStr);
+    if (end == -1) return ".";
+    else return path[0 .. end];
+}
+
 IStr join(IStr[] args...) {
     if (args.length == 0) return ".";
     Str result = [];

@@ -19,9 +19,14 @@ Then, run the script with:
 dmd -run noby.d
 ```
 
-## Using Noby With Dub
+## Tools Made With Noby
 
-To create a local noby.d file, run:
+* [Closed](https://github.com/Kapendev/closed)
+* [Parin Packages](https://github.com/Kapendev/parin/tree/main/packages)
+
+## DUB Support
+
+To create a local noby.d file with DUB, run:
 
 ```cmd
 dub run noby:init
