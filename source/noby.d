@@ -117,19 +117,6 @@ IStr[] find(IStr path, IStr ext, bool isRecursive = false) {
     return result;
 }
 
-IStr join(IStr[] args...) {
-    if (args.length == 0) return ".";
-    Str result = [];
-    auto length = 0;
-    foreach (i, arg; args) {
-        result ~= arg;
-        if (i != args.length - 1) {
-            result ~= pathSep;
-        }
-    }
-    return result;
-}
-
 IStr read() {
     import std.stdio;
     return readln().trim();
