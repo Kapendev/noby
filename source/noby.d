@@ -778,3 +778,14 @@ IStr enumToStr(T)(T value) {
         default: assert(0, "WTF!");
     }
 }
+
+/// Converts the string value to its enum representation.
+// NOTE: This function is adapted from Joka and modified for Noby.
+T toEnum(T)(IStr str) {
+    switch (str) {
+        static foreach (m; __traits(allMembers, T)) {
+            mixin("case m: return T.", m, ";");
+        }
+        default: return T.init;
+    }
+}
